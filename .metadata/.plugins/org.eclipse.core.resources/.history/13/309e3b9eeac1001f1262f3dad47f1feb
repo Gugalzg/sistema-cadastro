@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projeto Spring Boot com Thymeleaf</title>
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    
+    <!-- Font Awesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+    <!-- CSS personalizado para animações e efeitos -->
+    <style>
+        /* Definindo o efeito fade-in com animação */
+        .fade-in {
+            animation: fadeInEffect 2s ease-out;
+        }
+
+        /* Keyframes para animação fade-in */
+        @keyframes fadeInEffect {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Estilo para a animação slide-in */
+        .slide-in {
+            opacity: 0;
+            transform: translateX(-100%);
+            animation: slideInEffect 1.5s ease-out forwards; 
+        }
+
+        @keyframes slideInEffect {
+            0% {
+                opacity: 0;
+                transform: translateX(-100%);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Estilo para links de navegação */
+        .nav-link {
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+        
+        /* Efeito ao passar o mouse sobre os links */
+        .nav-link:hover {
+            color: #007bff;
+            transform: translateX(5px);
+        }
+
+        /* Customizando o container */
+        .container {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+
+        /* Ajustando o título */
+        h1 {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #343a40;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        /* Estilo para a lista de itens */
+        .list-group-item {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #ffffff;
+            margin-bottom: 10px;
+            transition: transform 0.2s, box-shadow 0.3s;
+        }
+
+        .list-group-item:hover {
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            transform: translateY(-5px);
+        }
+
+        /* Adicionando uma borda no contêiner de links */
+        .list-group {
+            padding: 20px;
+            border-radius: 5px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        /* Animação de fading para as transições */
+        .fade-out {
+            animation: fadeOutEffect 1s forwards;
+        }
+
+        @keyframes fadeOutEffect {
+            0% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5 fade-in" id="page-content">
+        <h1>Bem-vindo ao Projeto!</h1>
+        <ul class="list-group mt-3">
+            <li class="list-group-item">
+                <a th:href="@{/users/show}" class="nav-link"><i class="fas fa-users"></i> Listar Usuários</a>
+            </li>
+            <li class="list-group-item">
+                <a th:href="@{/users/register}" class="nav-link"><i class="fas fa-user-plus"></i> Cadastrar Novo Usuário</a>
+            </li>
+            <li class="list-group-item">
+                <a th:href="@{/categories/show}" class="nav-link"><i class="fas fa-list"></i> Listar Categorias</a>
+            </li>
+            <li class="list-group-item">
+                <a th:href="@{/categories/register}" class="nav-link"><i class="fas fa-plus-circle"></i> Cadastrar Categorias</a>
+            </li>
+            <li class="list-group-item">
+                <a th:href="@{/products/show}" class="nav-link"><i class="fas fa-cogs"></i> Listar Produtos</a>
+            </li>
+            <li class="list-group-item">
+                <a th:href="@{/products/register}" class="nav-link"><i class="fas fa-cart-plus"></i> Cadastrar Produtos</a>
+            </li>  
+        </ul>
+    </div>
+
+    <!-- Adicionando o jQuery e Bootstrap JS para outras funcionalidades -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+    <!-- JS para animar quando a página carregar e transição de página -->
+    <script>
+        $(document).ready(function() {
+            // Função para aplicar animação ao carregar a página
+            function applyPageTransition() {
+                $('#page-content').addClass('fade-in');
+            }
+
+            // Chama a função para animação ao carregar a página
+            applyPageTransition();
+
+            // Intercepta os links de navegação para adicionar animação
+            $('.nav-link').on('click', function(event) {
+                event.preventDefault(); // Impede o comportamento padrão do clique
+                var targetUrl = $(this).attr('href');
+                
+                // Aplica animação de fade-out antes de carregar o conteúdo novo
+                $('#page-content').addClass('fade-out').fadeOut(500, function() {
+                    // Carrega o novo conteúdo da página
+                    $('#page-content').load(targetUrl, function() {
+                        $('#page-content').removeClass('fade-out').fadeIn(1000);
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>

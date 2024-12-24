@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Registrar Produto</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Registrar Novo Produto</h1>
+        
+        <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+        
+        <form th:action="@{/products/register}" th:object="${product}" method="post">
+            <div class="form-group">
+                <label for="name">Nome do Produto</label>
+                <input type="text" class="form-control" id="name" 
+                       th:field="*{name}" required>
+            </div>
+            <div class="form-group">
+                <label for="description">Descrição</label>
+                <textarea class="form-control" id="description" 
+                          th:field="*{description}" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="price">Preço</label>
+                <input type="number" step="0.01" class="form-control" 
+                       id="price" th:field="*{price}" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Registrar</button>
+            <a th:href="@{/products/show}" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+</body>
+</html>
