@@ -1,0 +1,60 @@
+package com.projetoguga.demo.controllers;
+
+import java.util.List;
+
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.SessionAttributes;
+
+import com.projetoguga.demo.entities.Cart;
+import com.projetoguga.demo.entities.CartItem;
+import com.projetoguga.demo.entities.Product;
+import com.projetoguga.demo.services.ProductService;
+
+@RestController
+@RequestMapping("/cart")
+@SessionAttributes("cart")
+public class CartViewController {
+
+	@Autowired
+    private ProductService productService; // Certifique-se de que esta linha está presente
+
+	
+    @ModelAttribute("cart")
+    public Cart getCart() {
+        return new Cart();
+    }
+
+    @PostMapping("/add")
+    public String addToCart(@ModelAttribute("cart") Cart cart, 
+                            @RequestParam Long productId, 
+                            @RequestParam int quantity) {
+        Product product = productService.findById(productId);
+        cart.addItem(product, quantity);
+        return "Produto adicionado ao carrinho!";
+    }
+
+    @GetMapping
+    public List<CartItem> viewCart(@ModelAttribute("cart") Cart cart) {
+        return cart.getItems();
+    }
+
+    @DeleteMapping("/remove/{id}")
+    public String removeFromCart(@ModelAttribute("cart") Cart cart, @PathVariable Long id) {
+        cart.removeItem(id);
+        return "Produto removido do carrinho!";
+    }
+
+    @GetMapping("/checkout")
+    public double checkout(@ModelAttribute("cart") Cart cart) {
+        double total = cart.getTotal();
+        cart.getItems().clear(); // Limpa o carrinho após o checkout
+        return total;
+    }
+}

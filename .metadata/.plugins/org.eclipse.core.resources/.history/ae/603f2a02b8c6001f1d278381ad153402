@@ -1,0 +1,5 @@
+package com.projetoguga.demo.entities;
+
+public class Cart {
+
+}

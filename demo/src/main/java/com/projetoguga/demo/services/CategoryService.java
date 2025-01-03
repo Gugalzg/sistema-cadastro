@@ -41,4 +41,12 @@ public class CategoryService {
         return repository.save(category);
 		
 	}
+	
+	public void update(Category category) {
+        // Certifique-se de que o produto tem um ID válido antes de salvar
+        if (category.getId() != null) {
+            repository.save(category); // Atualiza o registro no banco
+        }
+    }
+
 }

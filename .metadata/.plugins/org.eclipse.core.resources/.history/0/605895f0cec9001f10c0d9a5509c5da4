@@ -1,0 +1,24 @@
+package com.projetoguga.demo.entities;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Cart {
+
+	private List<OrderItem> items = new ArrayList<>();
+
+    public void addItem(OrderItem item) {
+        items.add(item);
+    }
+
+    public double getTotal() {
+        return items.stream()
+                    .mapToDouble(item -> item.getSubTotal()).sum();
+    }
+
+
+    public List<OrderItem> getItems() {
+        return items;
+    }
+	
+}

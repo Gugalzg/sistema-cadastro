@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projeto Spring Boot com Thymeleaf</title>
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+    <style>
+        body {
+            border-top: 40px solid #007bff;
+            border-bottom: 40px solid #007bff;
+            background-color: #f8f9fa;
+            min-height: 100vh;
+            padding-bottom: 30px;
+        }
+        .btn-blue {
+            background-color: #007bff;
+            color: white;
+            font-weight: bold;
+        }
+        .btn-blue:hover {
+            background-color: #0056b3;
+        }
+        .fade-in {
+            animation: fadeInEffect 2s ease-out;
+        }
+        @keyframes fadeInEffect {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5 fade-in" id="page-content">
+        <h1 class="text-center">Bem-vindo!</h1>
+
+        <!-- Mensagem de Sucesso -->
+        <div th:if="${message}" class="alert alert-success text-center" th:text="${message}"></div>
+
+        <!-- Produtos -->
+        <div class="mt-4">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Produtos</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nome</th>
+                                    <th>Descrição</th>
+                                    <th>Preço</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="product : ${products}">
+                                    <td th:text="${product.id}"></td>
+                                    <td th:text="${product.name}"></td>
+                                    <td th:text="${product.description}"></td>
+                                    <td th:text="${#numbers.formatCurrency(product.price, 'BRL')}"></td>
+                                    <td>
+                                        <a th:href="@{/products/edit/{id}(id=${product.id})}" class="btn btn-warning btn-sm">
+                                            <i class="fas fa-edit"></i> Editar
+                                        </a>
+                                        <a th:href="@{/products/delete/{id}(id=${product.id})}" class="btn btn-danger btn-sm" 
+                                           onclick="return confirm('Tem certeza que deseja excluir este produto?')">
+                                           <i class="fas fa-trash-alt"></i> Excluir
+                                       </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Categorias -->
+        <div class="mt-5">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Categorias</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nome</th>
+                                    <th class="text-end">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="category : ${categories}">
+                                    <td th:text="${category.id}"></td>
+                                    <td th:text="${category.name}"></td>
+                                    <td class="text-end">
+                                        <a th:href="@{/categories/edit/{id}(id=${category.id})}" class="btn btn-warning btn-sm">
+                                            <i class="fas fa-edit"></i> Editar
+                                        </a>
+                                        <a th:href="@{/categories/delete/{id}(id=${category.id})}" class="btn btn-danger btn-sm"
+                                           onclick="return confirm('Tem certeza que deseja excluir esta categoria?')">
+                                           <i class="fas fa-trash-alt"></i> Excluir
+                                       </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Botões -->
+        <div class="d-flex justify-content-center mt-5">
+            <a href="/products/register" class="btn btn-blue me-3">Registrar Produto</a>
+            <a href="/categories/register" class="btn btn-blue">Registrar Categoria</a>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

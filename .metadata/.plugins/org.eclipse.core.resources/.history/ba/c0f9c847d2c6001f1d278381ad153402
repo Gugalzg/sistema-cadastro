@@ -1,0 +1,18 @@
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID do Pedido</th>
+            <th>Data</th>
+            <th>Status</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="order : ${orders}">
+            <td th:text="${order.id}"></td>
+            <td th:text="${order.moment}"></td>
+            <td th:text="${order.orderStatus}"></td>
+            <td th:text="${order.total()}"></td>
+        </tr>
+    </tbody>
+</table>

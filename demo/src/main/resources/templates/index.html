@@ -29,90 +29,138 @@
             text-align: center;
             margin-bottom: 30px;
         }
-        .accordion-button:not(.collapsed) {
-            color: #fff;
-            background-color: #007bff;
+        body {
+            border-top: 40px solid #007bff; /* Borda azul no topo */
+            min-height: 100vh; /* Garantir que a página ocupe a altura total da tela */
+            background-color: #f8f9fa; /* Cor de fundo suave */
+            padding-bottom: 30px; /* Espaçamento extra na parte inferior */
+            border-bottom: 40px solid #007bff; /* Borda azul na parte inferior */
         }
-        .accordion-item {
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            margin-bottom: 10px;
+        .btn-blue {
+            background-color: #007bff;
+            color: white;
+            font-weight: bold;
         }
 		
-		    body {
-		        border-top: 40px solid #007bff; /* Borda azul no topo */
-		    }
-
+		.acoes-header {
+		    padding-right: 10px; /* Ajuste fino da posição do texto */
+		}
+		.position-fixed {
+		    position: fixed;
+		    top: 5px;
+		    right: 5px;
+		    z-index: 9999; /* Garantir que o botão fique acima de outros elementos */
+		}
+        .btn-blue:hover {
+            background-color: #0056b3;
+            color: white;
+        }
+        .list-group-item {
+            font-size: 1.1em;
+        }
     </style>
 </head>
 <body>
     <div class="container mt-5 fade-in" id="page-content">
         <h1>Bem-vindo!</h1>
 
-        <div class="accordion" id="mainAccordion">
-            <!-- Usuário Section -->
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="headingUser">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseUser" aria-expanded="false" aria-controls="collapseUser">
-                        <i class="fas fa-users me-2"></i> Usuário
-                    </button>
-                </h2>
-                <div id="collapseUser" class="accordion-collapse collapse" aria-labelledby="headingUser" data-bs-parent="#mainAccordion">
-                    <div class="accordion-body">
-                        <ul class="list-group">
-                            <li class="list-group-item">
-                                <a th:href="@{/users/show}" class="nav-link"><i class="fas fa-users"></i> Listar Usuários</a>
-                            </li>
-                            <li class="list-group-item">
-                                <a th:href="@{/users/register}" class="nav-link"><i class="fas fa-user-plus"></i> Cadastrar Novo Usuário</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+        <!-- Mensagem de sucesso global -->
+        <div th:if="${message}" class="alert alert-success text-center" th:text="${message}"></div>
 
-            <!-- Produtos Section -->
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="headingProducts">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseProducts" aria-expanded="false" aria-controls="collapseProducts">
-                        <i class="fas fa-cogs me-2"></i> Produtos
-                    </button>
-                </h2>
-                <div id="collapseProducts" class="accordion-collapse collapse" aria-labelledby="headingProducts" data-bs-parent="#mainAccordion">
-                    <div class="accordion-body">
-                        <ul class="list-group">
-                            <li class="list-group-item">
-                                <a th:href="@{/products/show}" class="nav-link"><i class="fas fa-cogs"></i> Listar Produtos</a>
-                            </li>
-                            <li class="list-group-item">
-                                <a th:href="@{/products/register}" class="nav-link"><i class="fas fa-cart-plus"></i> Cadastrar Produtos</a>
-                            </li>
-                        </ul>
-                    </div>
+        <!-- Seção de Produtos -->
+        <div>
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Produtos</h5>
                 </div>
-            </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nome</th>
+                                <th>Descrição</th>
+                                <th>Preço</th>
+								<th class="text-end">Ações</th> <!-- Classe adicionada aqui -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Exibindo produtos com Thymeleaf -->
+<tr th:each="product : ${products}">
+    <td th:text="${product.id}"></td>
+    <td th:text="${product.name}"></td>
+    <td th:text="${product.description}"></td>
+    <td th:text="${product.price}"></td>
+    <td class="text-end"> <!-- Classe adicionada aqui -->
+        <div class="d-flex justify-content-end">
+            <a th:href="@{/products/edit/{id}(id=${product.id})}" class="btn btn-warning btn-sm me-2">
+                <i class="fas fa-edit"></i> Editar
+            </a>
+            <a th:href="@{/products/delete/{id}(id=${product.id})}" class="btn btn-danger btn-sm me-2" 
+               onclick="return confirm('Tem certeza que deseja excluir este produto?')">
+               <i class="fas fa-trash-alt"></i> Excluir   
+            </a>
+            <form th:action="@{/cart/add}" method="post" class="d-inline-block">
+                <input type="hidden" name="productId" th:value="${product.id}" />
+                <input type="hidden" name="quantity" value="1" />
+                <button type="submit" class="btn btn-success btn-sm">
+                    Adicionar ao Carrinho
+                </button>
+            </form>
+        </div>
+    </td>
+</tr>
 
-            <!-- Categorias Section -->
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="headingCategories">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCategories" aria-expanded="false" aria-controls="collapseCategories">
-                        <i class="fas fa-list me-2"></i> Categorias
-                    </button>
-                </h2>
-                <div id="collapseCategories" class="accordion-collapse collapse" aria-labelledby="headingCategories" data-bs-parent="#mainAccordion">
-                    <div class="accordion-body">
-                        <ul class="list-group">
-                            <li class="list-group-item">
-                                <a th:href="@{/categories/show}" class="nav-link"><i class="fas fa-list"></i> Listar Categorias</a>
-                            </li>
-                            <li class="list-group-item">
-                                <a th:href="@{/categories/register}" class="nav-link"><i class="fas fa-plus-circle"></i> Cadastrar Categorias</a>
-                            </li>
-                        </ul>
-                    </div>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
+
+        <!-- Seção de Categorias -->
+        <div class="mt-5">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Categorias</h5>
+                </div>
+                <div class="card-body">
+					<table class="table table-striped">
+					    <thead>
+					        <tr>
+					            <th>ID</th>
+					            <th>Nome</th>
+					            <th class="text-end">Ações</th> <!-- Classe sem text-end -->
+					        </tr>
+					    </thead>
+					    <tbody>
+					        <tr th:each="category : ${categories}">
+					            <td th:text="${category.id}"></td>
+					            <td th:text="${category.name}"></td>
+					            <td class="text-end">
+					                <a th:href="@{/categories/edit/{id}(id=${category.id})}" class="btn btn-warning btn-sm">
+					                    <i class="fas fa-edit"></i> Editar
+					                </a>
+					                <a th:href="@{/categories/delete/{id}(id=${category.id})}" class="btn btn-danger btn-sm"
+					                   onclick="return confirm('Tem certeza que deseja excluir esta categoria?')">
+					                    <i class="fas fa-trash-alt"></i> Excluir
+					                </a>
+					            </td>
+					        </tr>
+					    </tbody>
+					</table>
+                </div>
+            </div>
+        </div>
+		
+		<div class="position-absolute" style="top: 60px; right: 15px;">
+    <a href="/cart" class="btn btn-primary">Ir para o Carrinho</a>
+</div>
+
+        <!-- Botões de ação -->
+        <div class="d-flex justify-content-center mt-5">
+            <a href="/products/register" class="btn btn-blue me-3">Registrar Produto</a>
+            <a href="/categories/register" class="btn btn-blue">Registrar Categoria</a>
+        </div>    
     </div>
 
     <!-- Bootstrap JS (versão 5.3) -->

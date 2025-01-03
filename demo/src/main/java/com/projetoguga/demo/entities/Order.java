@@ -104,6 +104,21 @@ public class Order implements Serializable {
 		return items;
 	}
 	
+	public void setItems(Set<OrderItem> items) {
+        this.items = items;
+    }
+	
+	// Adicionar itens individualmente
+    public void addItem(OrderItem item) {
+        items.add(item);
+        item.setOrder(this); // Configura a referência bidirecional, se aplicável
+    }
+
+    public void removeItem(OrderItem item) {
+        items.remove(item);
+        item.setOrder(null); // Remove a referência bidirecional
+    }
+	
 	public Double getTotal() {
 		double sum = 0.0;
 		for(OrderItem x : items) {

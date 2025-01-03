@@ -1,0 +1,42 @@
+package com.projetoguga.demo.services;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.projetoguga.demo.entities.Cart;
+import com.projetoguga.demo.entities.CartItem;
+import com.projetoguga.demo.entities.Product;
+import com.projetoguga.demo.entities.User;
+import com.projetoguga.demo.repositories.CartItemRepository;
+import com.projetoguga.demo.repositories.CartRepository;
+
+public class CartService {
+
+	@Autowired
+    private CartRepository cartRepository;
+
+    @Autowired
+    private CartItemRepository cartItemRepository;
+
+    public Cart getCartForUser(User user) {
+        return cartRepository.findByUser(user);
+    }
+
+    public void addItemToCart(Cart cart, Product product, int quantity) {
+        CartItem cartItem = new CartItem();
+        cartItem.setCart(cart);
+        cartItem.setProduct(product);
+        cartItem.setQuantity(quantity);
+        cartItemRepository.save(cartItem); // Adiciona o item ao carrinho
+    }
+
+    public void removeItemFromCart(Cart cart, Long productId) {
+        CartItem cartItem = cartItemRepository.findByCartAndProductId(cart, productId);
+        if (cartItem != null) {
+            cartItemRepository.delete(cartItem);  // Remove o item do carrinho
+        }
+    }
+
+    public void updateCart(Cart cart) {
+        cartRepository.save(cart); // Atualiza o carrinho no banco de dados
+    }
+}

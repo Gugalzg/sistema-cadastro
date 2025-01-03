@@ -48,8 +48,13 @@ public class ProductService {
 
 	        // Salvar o usuário
 	        return repository.save(product);
-			
+
 		}	
-		
-	}
+	public void update(Product product) {
+        // Certifique-se de que o produto tem um ID válido antes de salvar
+        if (product.getId() != null) {
+            repository.save(product); // Atualiza o registro no banco
+        }
+    }
+  }
 
